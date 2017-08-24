@@ -7,7 +7,7 @@ Works by attaching to a process and printing each memory area. Optionally, memor
 ## Install
 
 ```
-$ go install github.com/gianlucaborello/ptexplore/cmd/ptexplore
+$ go get github.com/gianlucaborello/ptexplore/cmd/ptexplore
 ```
 
 ## Usage
