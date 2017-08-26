@@ -3,6 +3,7 @@ package ptexplore
 import (
 	"bytes"
 	"encoding/binary"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -15,6 +16,8 @@ import (
 const pageMapReadChunk uint64 = 8
 
 const pfnMask uint64 = 0x7FFFFFFFFFFFFF
+const swapTypeMask uint64 = 0x1F
+const swapOffsetMask uint64 = 0x7FFFFFFFFFFFE0
 
 const (
 	pageSoftDirty uint64 = 1 << 55
@@ -267,8 +270,19 @@ func (p *PtExplorerState) printPage(address uint64, nonMapped *int) error {
 	} else if pageEntry&pageSwapped != 0 {
 		fmt.Printf("%0#16x: ", address)
 		fmt.Printf("swapped ")
+
+		swapType := pageEntry & swapTypeMask
+		fmt.Printf("type: %v ", swapType)
+
+		swapOffset := (pageEntry & swapOffsetMask) >> 5
+		fmt.Printf("offset: %0#16x ", swapOffset)
+
 		fmt.Printf("\n")
 	} else {
+		pfn := pageEntry & pfnMask
+		if pfn != 0 {
+			return errors.New("pfn != 0 for non present page")
+		}
 		*nonMapped++
 	}
 
