@@ -10,6 +10,12 @@ Works by attaching to a process and printing each memory area. Optionally, memor
 $ go get github.com/gianlucaborello/ptexplore/cmd/ptexplore
 ```
 
+## Use cases
+* Explore what portion of mapped memory areas of a process are actually present in memory
+* Check if a memory address dereference will cause a page fault
+* Analyze what portion of mapped memory areas are swapped out
+* Look up the physical address corresponding to a virtual address (useful for NUMA)
+
 ## Usage
 
 ```
